@@ -1,4 +1,4 @@
-﻿# MS&A Builder
+﻿# MSA Builder
 
 **Memory · Soul · Agent —— 建立你与 AI 之间的底层协作契约。支持分层架构。**
 
