@@ -44,17 +44,15 @@ Moqi（默契）是一套让人与 AI 建立共同上下文、协作边界和持
 - 安装全局依赖、修改系统设置、生产部署或公开发布
 - 付费操作、权限配置或第三方后台的实际变更
 
-文件迁移必须先复制和验证，确认新位置正常后再单独删除旧源。详细流程见 `references/discipline.md`。
+文件迁移必须先复制和验证，确认新位置正常后再单独删除旧源。
 
 ## 条件路由
 
-- 修改源代码、依赖或测试：读取 `references/coding.md`。
-- Git 写操作或工作区清理：读取 `references/git.md`。
-- 长期项目或恢复上下文：读取 `references/roadmap.md`。
-- 外部 API、认证或协议调试：读取 `references/debugging.md`。
-- 研究核验、文件迁移或未知文件处置：读取 `references/discipline.md`。
-- Skills 安装或源码维护：读取 `references/tool_usage.md`。
+{{CONDITIONAL_ROUTES}}
+
 - 精确触发 `[对齐]`：读取 `ALIGNMENT.md`。
+
+没有按需细则时删除未使用的路由和占位符，不创建空 reference。
 
 ## 交付检查
 

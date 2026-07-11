@@ -11,7 +11,6 @@ from pathlib import Path
 
 REQUIRED_FILES = (
     "entrypoints/AGENTS.md",
-    "entrypoints/CLAUDE.md",
     "MSA/Memory.md",
     "MSA/Soul.md",
     "MSA/Agent.md",
@@ -20,11 +19,9 @@ REQUIRED_FILES = (
 RETIRED_PATHS = (
     "MSA/references",
     "references/alignment.md",
-    "MSA提示词模板.md",
 )
 LINE_LIMITS = {
     "entrypoints/AGENTS.md": 150,
-    "entrypoints/CLAUDE.md": 30,
     "MSA/Memory.md": 60,
     "MSA/Soul.md": 80,
     "MSA/Agent.md": 60,
@@ -64,9 +61,7 @@ def validate(root: Path, allow_placeholders: bool) -> tuple[list[str], list[str]
         errors.append("AGENTS.md has no ALIGNMENT.md route")
 
     references = root / "references"
-    if not references.is_dir():
-        errors.append("Missing references directory")
-    else:
+    if references.is_dir():
         for path in sorted(references.glob("*.md")):
             route = f"references/{path.name}"
             if route not in agents:

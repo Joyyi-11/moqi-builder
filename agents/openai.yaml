@@ -1,4 +1,4 @@
 interface:
   display_name: "Moqi（默契）Builder"
-  short_description: "搭建、升级、诊断并持续对齐一套可复用的人机协作系统"
-  default_prompt: "Use $moqi-builder to build or improve a Moqi collaboration system."
+  short_description: "搭建、更新、诊断并持续对齐一套可复用的人机协作系统"
+  default_prompt: "使用 $moqi-builder 通过对话搭建或完善我的 Moqi 人机协作系统。"
