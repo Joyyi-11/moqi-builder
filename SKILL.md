@@ -21,7 +21,7 @@ Moqi（默契）是一套让人与 AI 建立共同上下文、协作边界和持
 ## 核心架构
 
 ```text
-entrypoints/       第一层：每轮必须执行的运行规则
+entrypoints/       第一层：Agent 入口
 MSA/               第二层：Memory.md / Soul.md / Agent.md
 references/        第三层：有明确触发条件的按需细则
 ALIGNMENT.md       对齐控制平面
