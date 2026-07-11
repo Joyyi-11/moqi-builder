@@ -57,4 +57,7 @@ agents/openai.yaml        Codex 界面元数据
 
 ## 作者
 
-连漪（Joyyi-11）
+- **连漪（Joyyi-11）**：Moqi 的发起者与系统设计者。
+- **OpenAI Codex**：Moqi 3.0 的架构重构与实现协作者。
+
+早期 MSA Builder 由连漪与 Claude Code 协作完成；Moqi 3.0 由连漪与 OpenAI Codex 共同重构。
