@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 先读 README 的「适用边界」
+    url: https://github.com/Joyyi-11/moqi-builder#%E9%80%82%E7%94%A8%E8%BE%B9%E7%95%8C
+    about: 一次性 prompt 收藏、单轮任务的临时偏好、完整专业工作流的堆放不属于 Moqi 的适用范围。
+  - name: 模板与核心定义不接受直接 PR
+    url: https://github.com/Joyyi-11/moqi-builder/blob/main/CONTRIBUTING.md#%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%A0%B8%E5%BF%83%E5%AE%9A%E4%B9%89%E7%9A%84%E6%94%B6%E6%B3%95
+    about: assets/templates/ 与 SKILL.md 的改动走 issue 建议，由维护者在真实源修改后发布。

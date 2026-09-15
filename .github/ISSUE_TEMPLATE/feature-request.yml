@@ -1,0 +1,43 @@
+name: 建议
+description: 新增平台适配器、模式方法改进、校验项补充
+title: "[建议] "
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 建议类型
+      options:
+        - 新增平台适配器
+        - 模式方法或指南改进
+        - 模板或架构调整（走 issue，不直接提 PR）
+        - 结构校验项补充
+    validations:
+      required: true
+  - type: textarea
+    id: scenario
+    attributes:
+      label: 你的协作场景
+      description: 你平时怎么用 AI、同时用几个 agent、当前的协作系统长什么样
+    validations:
+      required: true
+  - type: textarea
+    id: gap
+    attributes:
+      label: 现有做法哪里不够
+      description: 尽量给出真实发生过的情况，而不是设想
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 你希望的改变
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: 确认
+      options:
+        - label: 我确认这条建议不含个人内容（真实姓名、绝对路径、私人记忆、个人画像）
+          required: true

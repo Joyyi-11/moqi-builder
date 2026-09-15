@@ -96,7 +96,20 @@ assets/templates/         实例的最小核心骨架
 assets/adapters/          按平台选用的入口适配器
 scripts/verify_system.py  跨平台结构校验
 agents/openai.yaml        Codex 界面元数据
+CONTRIBUTING.md           贡献方式与仓库边界
+LICENSE                   MIT
+.github/                  issue 与 PR 模板
 ```
+
+## 贡献
+
+欢迎提平台适配器、文档修正与校验项补充，方式见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。`assets/templates/` 与 `SKILL.md` 不接受直接 PR，相关建议请走 issue。
+
+Issue 与 PR 用中文或英文都可以。
+
+## 许可
+
+[MIT](LICENSE)
 
 ## 作者
 
