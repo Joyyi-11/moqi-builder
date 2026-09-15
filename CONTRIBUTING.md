@@ -40,7 +40,7 @@
 
 ## 提交之前
 
-1. 跑一次结构校验：`python scripts/verify_system.py <实例根目录>`，确认没有 error。
+1. 改了 `assets/templates/` 的话，跑一次结构校验：`python scripts/verify_system.py assets/templates --allow-placeholders`，确认没有 error。`--allow-placeholders` 在这里是必须的——模板保留 `{{占位符}}` 是设计意图，不带这个参数会把正常模板判为缺陷。
 2. 自查有没有带入个人内容：真实姓名、绝对路径、个人画像、私人记忆、具体项目的专有名词。
 3. 检查 `{{...}}` 占位符的语义有没有被改掉——它是待填写的位置，不是可以直接替换成某个具体值的示例。
 
