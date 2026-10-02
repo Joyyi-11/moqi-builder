@@ -34,6 +34,8 @@ ALIGNMENT.md       对齐控制平面
 
 入口负责每轮必须执行的规则，MSA 提供协作上下文，references 只在存在明确任务类型时创建，`ALIGNMENT.md` 负责持续减法和系统验证。
 
+入口同时定义启动自检：真实源标记、核心文件到位、指令生效——加载失败会主动提示，而不是静默降级。跨会话知识只落 Moqi 与项目文件，不写进单个 Agent 的私有记忆：其他 Agent 读不到，就等于没写。
+
 ## 四种模式
 
 - `build`：从零搭建，或整理已有协作系统。
@@ -93,7 +95,7 @@ npx skills add Joyyi-11/moqi-builder -g
 SKILL.md                  模式路由和核心边界
 references/               各模式的方法细则
 assets/templates/         实例的最小核心骨架
-assets/adapters/          按平台选用的入口适配器
+assets/adapters/          按平台选用的入口适配器示例（Claude Code / Codex / WorkBuddy / OpenCode）
 scripts/verify_system.py  跨平台结构校验
 agents/openai.yaml        Codex 界面元数据
 CONTRIBUTING.md           贡献方式与仓库边界

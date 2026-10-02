@@ -42,17 +42,27 @@
 ## 放置与命名
 
 - 文件放在 `entrypoints/<AGENT>.md`，命名用 Agent 标识（如 `CLAUDE.md`、`CODEX.md`、`WORKBUDDY.md`、`QODER.md`）。
-- 可在 `assets/adapters/<AGENT>.md` 提供一份带占位符的示例，供 build 阶段复制填充；`assets/adapters/CLAUDE.md`、`WORKBUDDY.md` 已是案例。
+- 可在 `assets/adapters/<AGENT>.md` 提供一份带占位符的示例，供 build 阶段复制填充；`assets/adapters/` 下的 `CLAUDE.md`、`CODEX.md`、`WORKBUDDY.md`、`OPENCODE.md` 已是案例。
 - `AGENTS.md` 是入口，不是适配器，不要改名或复制。
 
 ## 各 Agent 如何加载（案例）
 
 以下为已知加载方式的案例；新 Agent 按其自身机制接入，原理相同。
 
-- **Codex**：全局入口 `{{CODEX_ENTRY_PATH}}`（如 `~/.codex/AGENTS.md`）通过 symlink 或已验证副本加载 `entrypoints/AGENTS.md`；Skills 经 junction 指向 `{{AGENTS_SKILLS_PATH}}`。
+- **Codex**：全局入口 `{{CODEX_ENTRY_PATH}}`（如 `~/.codex/AGENTS.md`）通过 symlink 或已验证副本加载 `entrypoints/AGENTS.md`；Skills 经 junction 指向 `{{AGENTS_SKILLS_PATH}}`。Codex 还会读取项目内离目标文件最近的 `AGENTS.md`。
 - **Claude Code**：全局入口 `{{CLAUDE_ENTRY_PATH}}`（如 `~/.claude/CLAUDE.md`）加载薄适配器，再转入主入口；项目规则写项目 `CLAUDE.md`，跨 agent 项目规则写项目 `AGENTS.md`。
-- **WorkBuddy**：无全局 symlink；由记忆常驻指令（如 `{{WORKBUDDY_MEMORY_PATH}}`）要求每次会话读取 `entrypoints/WORKBUDDY.md`，再转入主入口；Skills 走产品内机制，不接 `{{AGENTS_SKILLS_PATH}}` 的 junction。
-- **Qoder 等其它 Agent**：同理，按其提供的全局入口、记忆或配置机制接入，薄适配器只记录加载方式与本平台差异。
+- **WorkBuddy**：无全局 symlink；由**身份层常驻载体**（如 `{{WORKBUDDY_IDENTITY_PATH}}`）的常驻指令要求每次会话读取主入口与 MSA——选载体时注意：能每次会话完整注入的载体才可靠，体积过大、注入时会被截断的文件不适合承担规则与红线副本。Skills 走产品内机制，不接 `{{AGENTS_SKILLS_PATH}}` 的 junction。
+- **OpenCode**：无 symlink；由全局配置 `{{OPENCODE_CONFIG_PATH}}` 的 `instructions` 数组直接列出主入口与 MSA 文件，会话启动即注入全文，不必依赖模型主动读取。该字段是启动时的静态快照，改动文件或新增、改名后须同步更新并重启。
+- **其它 Agent**：同理，按其提供的全局入口、记忆、配置注入或生命周期钩子机制接入，薄适配器只记录加载方式与本平台差异。
+
+
+## 用户级载体的边界
+
+接入一个 Agent 时，它自己的用户级载体（全局入口、常驻记忆、平台配置文件）只写三件事：本平台的加载方式、本机特有的坑、启动指针。跨 Agent 通用的协作规则、执行原则和红线一律只在 `entrypoints/AGENTS.md` 更新。
+
+判据是「其他 Agent 读不到这份文件＝没写」，以及「副本必然漂移」——同一规则在两处各存一份，改了主入口不会跟着改，只会越积越旧。发现某个载体里已经有通用内容的副本，迁回 `AGENTS.md` 后删除本地副本。
+
+唯一例外是机械可校验的副本：若某平台机制要求把红线之类内容复制进常驻载体才能保证注入，可以保留副本，但必须让校验器比对两处是否一致，否则漂移是必然结果。
 
 ## 校验兼容
 

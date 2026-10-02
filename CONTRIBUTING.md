@@ -15,7 +15,7 @@
 
 ### 1. 新增平台适配器（最欢迎）
 
-`assets/adapters/` 目前包含 `CLAUDE.md` 与 `WORKBUDDY.md`。如果你的 agent 平台不在其中，可以按现有文件的形态新增一个。
+`assets/adapters/` 目前包含 `CLAUDE.md`、`CODEX.md`、`WORKBUDDY.md` 与 `OPENCODE.md`。如果你的 agent 平台不在其中，可以按现有文件的形态新增一个。
 
 适配器只记录两件事：**该平台的加载方式**，以及**该平台与通用规则的真实差异**。不要在其中重复 `entrypoints/AGENTS.md` 已经写过的规则。
 

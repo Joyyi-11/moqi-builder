@@ -70,6 +70,14 @@ def validate(root: Path, allow_placeholders: bool) -> tuple[list[str], list[str]
             if count > 150:
                 warnings.append(f"{path.name} has {count} lines; recommended limit is 150")
 
+    # Dangling route check: every references/*.md path mentioned in AGENTS.md must exist.
+    # Skipped for template validation (--allow-placeholders): a template may keep a route
+    # whose target the instance is expected to create or delete during build.
+    if not allow_placeholders:
+        for route in sorted(set(re.findall(r"references/[A-Za-z0-9_\-]+\.md", agents))):
+            if not (root / route).is_file():
+                errors.append(f"AGENTS.md routes to a missing reference: {route}")
+
     entrypoints_dir = root / "entrypoints"
     if entrypoints_dir.is_dir():
         for adapter in sorted(entrypoints_dir.glob("*.md")):
