@@ -12,14 +12,14 @@
 - 该 Agent 的加载机制、入口路径或 Skills 路径与既有平台不同。
 - 用户确认会把该 Agent 作为长期协作者。
 
-不满足时，不创建适配器；Moqi 仍可仅靠 `AGENTS.md` + MSA 工作。
+不满足时，不创建适配器；Moqi 仍可仅靠 `AGENTS.md` + self 工作。
 
 ## 薄适配器的标准结构
 
 适配器只做三件事：
 
 1. 声明跨 agent 共享规则的唯一真实源是 `entrypoints/AGENTS.md`。
-2. 要求每次会话先读 `AGENTS.md`，再按其要求读 MSA。
+2. 要求每次会话先读 `AGENTS.md`，再按其要求读 `self` 两个核心文件。
 3. 只记录本平台的加载方式与差异；不复制共享规则，规则更新只改 `AGENTS.md`。
 
 最小模板：
@@ -31,7 +31,7 @@
 
 `{{MOQI_ROOT}}/entrypoints/AGENTS.md`
 
-每次会话先读取并遵循该文件，再按其中要求读取 MSA。共享规则只修改 `AGENTS.md`，不在本文件复制。
+每次会话先读取并遵循该文件，再按其中要求读取 self 两个核心文件。共享规则只修改 `AGENTS.md`，不在本文件复制。
 
 ## <Agent 名> 差异
 
@@ -42,7 +42,7 @@
 ## 放置与命名
 
 - 文件放在 `entrypoints/<AGENT>.md`，命名用 Agent 标识（如 `CLAUDE.md`、`CODEX.md`、`WORKBUDDY.md`、`QODER.md`）。
-- 可在 `assets/adapters/<AGENT>.md` 提供一份带占位符的示例，供 build 阶段复制填充；`assets/adapters/` 下的 `CLAUDE.md`、`CODEX.md`、`WORKBUDDY.md`、`OPENCODE.md` 已是案例。
+- 可在 `assets/adapters/<AGENT>.md` 提供一份带占位符的示例，供 build 阶段复制填充；`assets/adapters/` 下的 `CLAUDE.md`、`CODEX.md`、`WORKBUDDY.md`、`OPENCODE.md`、`DSH.md` 已是案例。
 - `AGENTS.md` 是入口，不是适配器，不要改名或复制。
 
 ## 各 Agent 如何加载（案例）
@@ -51,8 +51,9 @@
 
 - **Codex**：全局入口 `{{CODEX_ENTRY_PATH}}`（如 `~/.codex/AGENTS.md`）通过 symlink 或已验证副本加载 `entrypoints/AGENTS.md`；Skills 经 junction 指向 `{{AGENTS_SKILLS_PATH}}`。Codex 还会读取项目内离目标文件最近的 `AGENTS.md`。
 - **Claude Code**：全局入口 `{{CLAUDE_ENTRY_PATH}}`（如 `~/.claude/CLAUDE.md`）加载薄适配器，再转入主入口；项目规则写项目 `CLAUDE.md`，跨 agent 项目规则写项目 `AGENTS.md`。
-- **WorkBuddy**：无全局 symlink；由**身份层常驻载体**（如 `{{WORKBUDDY_IDENTITY_PATH}}`）的常驻指令要求每次会话读取主入口与 MSA——选载体时注意：能每次会话完整注入的载体才可靠，体积过大、注入时会被截断的文件不适合承担规则与红线副本。Skills 走产品内机制，不接 `{{AGENTS_SKILLS_PATH}}` 的 junction。
-- **OpenCode**：无 symlink；由全局配置 `{{OPENCODE_CONFIG_PATH}}` 的 `instructions` 数组直接列出主入口与 MSA 文件，会话启动即注入全文，不必依赖模型主动读取。该字段是启动时的静态快照，改动文件或新增、改名后须同步更新并重启。
+- **WorkBuddy**：无全局 symlink；由**身份层常驻载体**（如 `{{WORKBUDDY_IDENTITY_PATH}}`）的常驻指令要求每次会话读取主入口与 self——选载体时注意：能每次会话完整注入的载体才可靠，体积过大、注入时会被截断的文件不适合承担规则与红线副本。Skills 走产品内机制，不接 `{{AGENTS_SKILLS_PATH}}` 的 junction。
+- **OpenCode**：无 symlink；由全局配置 `{{OPENCODE_CONFIG_PATH}}` 的 `instructions` 数组直接列出主入口与 self 文件，会话启动即注入全文，不必依赖模型主动读取。该字段是启动时的静态快照，改动文件或新增、改名后须同步更新并重启。
+- **DeepSeek Harness**：读取用户级共享入口 `{{AGENTS_HOME}}/AGENTS.md`（如 `~/.agents/AGENTS.md`），再按项目目录链（项目根以 `.git` 标记）逐级加载 `AGENTS.md` / `CLAUDE.md`；运行中读写到更深目录后追加该目录入口。无符号链接权限时用已验证副本。
 - **其它 Agent**：同理，按其提供的全局入口、记忆、配置注入或生命周期钩子机制接入，薄适配器只记录加载方式与本平台差异。
 
 

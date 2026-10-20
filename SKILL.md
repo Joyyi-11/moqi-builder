@@ -1,6 +1,6 @@
 ---
 name: moqi-builder
-description: 搭建、更新、诊断和对齐 Moqi（默契）人机协作系统。适用于用户想创建个人 AI 协作系统、整理 AGENTS.md 和平台适配器、维护 Memory/Soul/Agent、检查规则重复或过期，或执行全局对齐。
+description: 搭建、更新、诊断和对齐 Moqi（默契）人机协作系统。适用于用户想创建个人 AI 协作系统、整理 AGENTS.md 和平台适配器、维护 Memory/Soul、检查规则重复或过期，或执行全局对齐。
 ---
 
 # Moqi（默契）Builder
@@ -22,9 +22,10 @@ Moqi（默契）是一套让人与 AI 建立共同上下文、协作边界和持
 
 ```text
 entrypoints/       第一层：Agent 入口
-MSA/               第二层：Memory.md / Soul.md / Agent.md
+self/              第二层：Memory.md / Soul.md
 references/        第三层：有明确触发条件的按需细则
 ALIGNMENT.md       对齐控制平面
+VERSION            架构版本（与入口首部标记一致）
 ```
 
 ## 不可破坏的边界
@@ -32,7 +33,7 @@ ALIGNMENT.md       对齐控制平面
 - `AGENTS.md` 是跨 agent 共享运行规则的唯一真实源；平台适配器只记录加载方式和平台差异。
 - `Memory.md` 只保存会改变当前协作判断的事实、优先级和资料真实源。
 - `Soul.md` 只保存有多个真实场景支撑、更新缓慢的思维模式。
-- `Agent.md` 只保存协作关系、主动程度、纠错方式和分歧处理。
+- `Agent.md` 不单独存在：协作关系、主动程度、纠错方式和分歧处理写进入口 `AGENTS.md` 的「协作姿态」段，因为它们是每轮都要遵守的行为规则。
 - `references/*.md` 只在存在明确任务类型和加载路由时创建。
 - `ALIGNMENT.md` 负责信息分流、去重、Gotchas 生命周期、验证和提交边界。
 - 跨会话知识只落 Moqi 与项目文件，不写进单个 Agent 的私有记忆：其他 Agent 读不到，就等于没写；每个 Agent 的用户级载体只写本平台独有的加载方式、本机的坑与启动指针。
@@ -52,7 +53,7 @@ ALIGNMENT.md       对齐控制平面
 
 ## 完成标准
 
-- `build`：目标实例具备入口、MSA、必要 references、`ALIGNMENT.md` 和验证脚本；入口含启动自检；用户确认没有模板占位符被当作真实答案。
+- `build`：目标实例具备入口、self 两文件、必要 references、`ALIGNMENT.md` 和验证脚本；入口含加载失败即停的读取句；用户确认没有模板占位符被当作真实答案。
 - `update`：新信息已放入唯一合适位置；相邻文件没有重复或冲突。
 - `diagnose`：按风险列出问题、证据、归属和处理建议；诊断模式不自动修改文件。
 - `align`：已完成分流、去重、结构验证和范围明确的本地提交边界；未获授权的旧源不删除。

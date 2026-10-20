@@ -14,27 +14,29 @@ Moqi 的做法是拆开职责：
 
 ```text
 Before: 一个不断变长的入口文件
-After: 入口规则 + MSA 协作上下文 + 按需细则 + 对齐控制平面
+After: 入口规则 + self 个人上下文 + 按需细则 + 对齐控制平面
 ```
 
 ## 架构
 
 ```text
 entrypoints/       第一层：Agent 入口
-MSA/               第二层：Memory.md / Soul.md / Agent.md
+self/              第二层：Memory.md / Soul.md
 references/        第三层：按需执行细则
 ALIGNMENT.md       对齐控制平面
+VERSION            架构版本（与入口首部标记一致）
 ```
 
 | 文件 | 回答的问题 |
 |:-----|:-----------|
 | `Memory.md` | AI 当前必须知道哪些事实，才会采取不同的行动？ |
 | `Soul.md` | 用户有哪些经过反复验证的思维和判断模式？ |
-| `Agent.md` | 用户希望与 AI 建立怎样的协作关系？ |
 
-入口负责每轮必须执行的规则，MSA 提供协作上下文，references 只在存在明确任务类型时创建，`ALIGNMENT.md` 负责持续减法和系统验证。
+协作关系、主动程度和纠错方式不单独建文件，统一写进入口 `AGENTS.md` 的「协作姿态」段——它们是每轮都要遵守的行为规则，不是按需读取的上下文。
 
-入口同时定义启动自检：真实源标记、核心文件到位、指令生效——加载失败会主动提示，而不是静默降级。跨会话知识只落 Moqi 与项目文件，不写进单个 Agent 的私有记忆：其他 Agent 读不到，就等于没写。
+入口负责每轮必须执行的规则，self 提供协作上下文，references 只在存在明确任务类型时创建，`ALIGNMENT.md` 负责持续减法和系统验证。
+
+入口开头定义加载自检：`self` 任一核心文件读不到，就停下并提示用户，不静默降级。跨会话知识只落 Moqi 与项目文件，不写进单个 Agent 的私有记忆：其他 Agent 读不到，就等于没写。
 
 ## 四种模式
 
@@ -52,12 +54,12 @@ ALIGNMENT.md       对齐控制平面
 ├── entrypoints/
 │   ├── AGENTS.md
 │   └── <按平台需要生成的薄适配器>
-├── MSA/
+├── self/
 │   ├── Memory.md
-│   ├── Soul.md
-│   └── Agent.md
+│   └── Soul.md
 ├── references/
 ├── ALIGNMENT.md
+├── VERSION
 └── scripts/verify_system.py
 ```
 
@@ -85,7 +87,7 @@ npx skills add Joyyi-11/moqi-builder -g
 
 - “帮我搭建一套 Moqi。”
 - “整理一下我现有的 AI 协作系统。”
-- “诊断一下我的 AGENTS、Memory、Soul 和 Agent。”
+- “诊断一下我的 AGENTS、Memory 和 Soul。”
 - “更新我的 Moqi。”
 - “[对齐]”
 
@@ -95,7 +97,7 @@ npx skills add Joyyi-11/moqi-builder -g
 SKILL.md                  模式路由和核心边界
 references/               各模式的方法细则
 assets/templates/         实例的最小核心骨架
-assets/adapters/          按平台选用的入口适配器示例（Claude Code / Codex / WorkBuddy / OpenCode）
+assets/adapters/          按平台选用的入口适配器示例（Claude Code / Codex / WorkBuddy / OpenCode / DeepSeek Harness）
 scripts/verify_system.py  跨平台结构校验
 agents/openai.yaml        Codex 界面元数据
 CONTRIBUTING.md           贡献方式与仓库边界

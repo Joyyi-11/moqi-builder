@@ -11,20 +11,23 @@ from pathlib import Path
 
 REQUIRED_FILES = (
     "entrypoints/AGENTS.md",
-    "MSA/Memory.md",
-    "MSA/Soul.md",
-    "MSA/Agent.md",
+    "self/Memory.md",
+    "self/Soul.md",
     "ALIGNMENT.md",
 )
 RETIRED_PATHS = (
+    "MSA",
+    "MSA/Memory.md",
+    "MSA/Soul.md",
+    "MSA/Agent.md",
     "MSA/references",
+    "self/Agent.md",
     "references/alignment.md",
 )
 LINE_LIMITS = {
     "entrypoints/AGENTS.md": 150,
-    "MSA/Memory.md": 60,
-    "MSA/Soul.md": 80,
-    "MSA/Agent.md": 60,
+    "self/Memory.md": 60,
+    "self/Soul.md": 80,
     "ALIGNMENT.md": 150,
 }
 PLACEHOLDER_PATTERN = re.compile(r"\{\{[A-Z0-9_]+\}\}")
@@ -57,6 +60,17 @@ def validate(root: Path, allow_placeholders: bool) -> tuple[list[str], list[str]
     agents = read_text(agents_path) if agents_path.is_file() else ""
     if "canonical-entrypoint" not in agents:
         errors.append("AGENTS.md does not declare the canonical entrypoint marker")
+    version_match = re.search(r"moqi-version:\s*(\S+)", agents)
+    if not version_match:
+        errors.append("AGENTS.md does not declare a moqi-version marker")
+    elif not allow_placeholders:
+        version_file = root / "VERSION"
+        if version_file.is_file():
+            declared = read_text(version_file).strip()
+            if version_match.group(1) != declared:
+                errors.append(
+                    f"AGENTS.md version ({version_match.group(1)}) does not match VERSION ({declared})"
+                )
     if "ALIGNMENT.md" not in agents:
         errors.append("AGENTS.md has no ALIGNMENT.md route")
 

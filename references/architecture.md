@@ -1,4 +1,4 @@
-# Moqi 3.0 架构
+# Moqi 架构
 
 ## 设计目标
 
@@ -10,23 +10,20 @@
 
 承载每轮都必须执行的沟通规则、行动边界、安全红线、通用执行原则和任务路由。
 
-- `AGENTS.md` 是跨 agent 共享运行规则的唯一真实源。
+- `AGENTS.md` 是跨 agent 共享运行规则的唯一真实源，首部声明 canonical 标记与版本号。
 - 每个 Agent 通过一份薄适配器接入：`entrypoints/<AGENT>.md` 只加载 `AGENTS.md` 并记录本平台差异，不复制共享规则。
-- 入口层按需延展：新增 Agent 只新增一份薄适配器，不改动 `AGENTS.md`、MSA 或校验器；Codex、Claude Code、WorkBuddy、OpenCode 等都只是案例，不是硬编码名单。
-- 入口同时定义启动自检（真实源标记、核心文件到位、指令生效）：把「加载失败」从静默状态变成可见提示，比事后怀疑更省成本。
+- 入口层按需延展：新增 Agent 只新增一份薄适配器，不改动 `AGENTS.md`、`self` 或校验器；Codex、Claude Code、WorkBuddy、OpenCode、DeepSeek Harness 等都只是案例，不是硬编码名单。
+- 加载失败必须可见：入口开头的读取句要求「任一 `self` 核心文件读不到就停下并提示用户」，不静默降级。
 - 项目级规则可以细化全局入口，但不能降低安全边界。
 
 薄适配器的接入流程见 `references/adapter.md`。
 
-Agent 入口层回答“不同 AI Agent 如何进入并加载规则”；MSA 中的 `Agent.md` 回答“用户希望与 AI 建立怎样的协作关系”，两者职责不同。
-
-### 第二层：MSA
+### 第二层：self
 
 - `Memory.md`：当前且会改变协作行动的事实、优先级和资料真实源。
 - `Soul.md`：有多个真实场景支撑、更新缓慢的思维模式和判断框架。
-- `Agent.md`：协作关系、主动程度、纠错方式和分歧处理。
 
-MSA 不是个人档案。完整履历、项目清单和动态数据应放在外部真实源，`Memory.md` 只在这些资料确有协作价值时保存指针。
+`self` 不是个人档案。完整履历、项目清单和动态数据应放在外部真实源，`Memory.md` 只在这些资料确有协作价值时保存指针。
 
 ### 第三层：references
 
@@ -34,13 +31,15 @@ MSA 不是个人档案。完整履历、项目清单和动态数据应放在外�
 
 1. 有清晰的任务触发条件。
 2. 在 `AGENTS.md` 中有唯一加载路由。
-3. 不复制入口、MSA 或其他 reference 的完整规则。
+3. 不复制入口、self 或其他 reference 的完整规则。
 
 完整且可独立复用的专业工作流不应塞入 Moqi；为它配置触发边界，交由相应工具或 Skill 承担。
 
 ## ALIGNMENT 控制平面
 
-`ALIGNMENT.md` 负责信息分流、去重、过期清理、Gotchas 生命周期、结构验证和提交边界。它作用于全部三层，因此不属于 MSA，也不是普通领域 reference。
+`ALIGNMENT.md` 负责识别值得沉淀的候选、等待用户确认、信息分流、去重、过期清理、Gotchas 生命周期、结构验证和提交边界。它作用于全部三层，因此不属于 self，也不是普通领域 reference。
+
+对齐的重心是**判断哪些经验值得跨会话保留**，不是产出一次提交。
 
 ## 单一真实源
 
@@ -57,14 +56,15 @@ MSA 不是个人档案。完整履历、项目清单和动态数据应放在外�
 
 ```text
 <moqi-root>/
+├── AGENTS.md              # 若实例把入口放在根目录
 ├── entrypoints/
 │   ├── AGENTS.md
 │   └── <按平台需要生成的适配器>
-├── MSA/
+├── self/
 │   ├── Memory.md
-│   ├── Soul.md
-│   └── Agent.md
-├── references/          # 有明确按需规则时才创建
+│   └── Soul.md
+├── references/            # 有明确按需规则时才创建
 ├── ALIGNMENT.md
+├── VERSION                # 与入口首部版本标记一致
 └── scripts/
 ```

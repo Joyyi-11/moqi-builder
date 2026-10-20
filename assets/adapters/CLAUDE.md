@@ -4,7 +4,7 @@
 
 `{{MOQI_ROOT}}/entrypoints/AGENTS.md`
 
-每次会话先读取并遵循该文件，再按其中要求读取 MSA。共享规则只修改 `AGENTS.md`，不在本文件复制。
+每次会话先读取并遵循该文件，再按其中要求读取 self 两个核心文件。共享规则只修改 `AGENTS.md`，不在本文件复制。
 
 ## Claude Code 差异
 
